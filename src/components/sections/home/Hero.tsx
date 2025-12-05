@@ -3,31 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Play, CheckCircle, Zap, BarChart3, Shield } from 'lucide-react';
+import { ArrowRight, CheckCircle, Zap, Shield, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_HERO = {
-  title: 'Streamline Your Business Operations',
-  subtitle: 'Intelligent Automation & Analytics',
-  description:
-    'Transform your workflow with AI-powered automation that scales with your business. Get real-time insights and reduce manual tasks by up to 80%.',
-  primaryCtaText: 'Start Free Trial',
-  primaryCtaHref: '/signup',
+  title: 'Transform Your Business with AI-Powered Analytics',
+  subtitle:
+    'Unlock actionable insights from your data with our cutting-edge SaaS platform. Make smarter decisions, faster.',
+  ctaText: 'Start Free Trial',
+  ctaHref: '/signup',
   secondaryCtaText: 'Watch Demo',
   secondaryCtaHref: '/demo',
-  badge: '🚀 New: Advanced Analytics Dashboard',
-  features: [
-    'Automated workflow optimization',
-    'Real-time performance analytics',
-    'Enterprise-grade security',
-  ],
+  imageUrl:
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+  imageAlt: 'Analytics dashboard showing data visualization',
+  trustBadge: 'Trusted by 10,000+ companies',
+  features: ['Real-time data processing', 'Advanced ML algorithms', 'Enterprise-grade security'],
   stats: [
-    { label: 'Time Saved', value: '80%' },
-    { label: 'Efficiency Boost', value: '3x' },
-    { label: 'ROI Increase', value: '250%' },
+    { label: 'Data Points Processed', value: '50B+' },
+    { label: 'Active Users', value: '100K+' },
+    { label: 'Uptime', value: '99.9%' },
   ],
-  trustText: 'Trusted by 10,000+ businesses worldwide',
 } as const;
 
 type HeroProps = Partial<typeof DEFAULT_HERO>;
@@ -38,11 +36,12 @@ export default function Hero(props: HeroProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const handlePrimaryClick = () => {
-    navigate(config.primaryCtaHref);
+    navigate(config.ctaHref);
   };
 
   const handleSecondaryClick = () => {
@@ -52,129 +51,125 @@ export default function Hero(props: HeroProps) {
   return (
     <section id="hero" className="bg-background text-foreground py-20 lg:py-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Badge */}
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          {/* Content Column */}
           <div
-            className={`mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           >
-            <Badge
-              variant="secondary"
-              className="bg-primary/10 text-primary border-primary/20 px-4 py-2 text-sm font-medium"
-            >
-              <span data-editable="badge">{config.badge}</span>
+            {/* Trust Badge */}
+            <Badge variant="secondary" className="bg-muted text-muted-foreground w-fit">
+              <CheckCircle className="w-4 h-4 mr-2 text-primary" />
+              <span data-editable="trustBadge">{config.trustBadge}</span>
             </Badge>
-          </div>
 
-          {/* Main Heading */}
-          <div
-            className={`mb-6 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight mb-4">
-              <span
-                data-editable="title"
-                className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
-              >
-                {config.title}
-              </span>
-            </h1>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary mb-6">
-              <span data-editable="subtitle">{config.subtitle}</span>
-            </h2>
-          </div>
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                <span data-editable="title">{config.title}</span>
+              </h1>
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
+                <span data-editable="subtitle">{config.subtitle}</span>
+              </p>
+            </div>
 
-          {/* Description */}
-          <div
-            className={`mb-8 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-          >
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              <span data-editable="description">{config.description}</span>
-            </p>
-          </div>
-
-          {/* Features List */}
-          <div
-            className={`mb-10 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-          >
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+            {/* Features List */}
+            <div className="flex flex-wrap gap-4">
               {config.features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground"
+                  className="flex items-center gap-2 bg-accent/50 text-accent-foreground px-3 py-2 rounded-full"
                 >
-                  <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
-                  <span data-editable={`features[${idx}]`}>{feature}</span>
+                  <Zap className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium" data-editable={`features[${idx}]`}>
+                    {feature}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* CTA Buttons */}
-          <div
-            className={`mb-12 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-          >
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
                 onClick={handlePrimaryClick}
-                data-editable-href="primaryCtaHref"
-                data-href={config.primaryCtaHref}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg font-semibold group"
+                data-editable-href="ctaHref"
+                data-href={config.ctaHref}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 group"
               >
-                <span data-editable="primaryCtaText">{config.primaryCtaText}</span>
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <span data-editable="ctaText">{config.ctaText}</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-
               <Button
                 variant="outline"
                 size="lg"
                 onClick={handleSecondaryClick}
                 data-editable-href="secondaryCtaHref"
                 data-href={config.secondaryCtaHref}
-                className="border-border text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-6 text-lg font-semibold group"
+                className="border-border hover:bg-accent hover:text-accent-foreground"
               >
-                <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
               </Button>
             </div>
-          </div>
 
-          {/* Stats Cards */}
-          <div
-            className={`mb-8 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
               {config.stats.map((stat, idx) => (
-                <Card
-                  key={idx}
-                  className="bg-card text-card-foreground border-border hover:shadow-lg transition-shadow"
-                >
-                  <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      <span data-editable={`stats[${idx}].value`}>{stat.value}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      <span data-editable={`stats[${idx}].label`}>{stat.label}</span>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div key={idx} className="text-center">
+                  <div
+                    className="text-2xl font-bold text-primary"
+                    data-editable={`stats[${idx}].value`}
+                  >
+                    {stat.value}
+                  </div>
+                  <div
+                    className="text-sm text-muted-foreground"
+                    data-editable={`stats[${idx}].label`}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Trust Indicator */}
+          {/* Image Column */}
           <div
-            className={`transition-all duration-700 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
           >
-            <p className="text-sm text-muted-foreground">
-              <span data-editable="trustText">{config.trustText}</span>
-            </p>
-          </div>
+            <Card className="bg-card border-border shadow-2xl overflow-hidden">
+              <CardContent className="p-0">
+                <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/10">
+                  <Image
+                    src={config.imageUrl}
+                    alt={config.imageAlt}
+                    fill
+                    className="object-cover"
+                    data-editable-src="imageUrl"
+                    priority
+                  />
+                  {/* Overlay with icons */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent">
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                            <TrendingUp className="w-5 h-5 text-primary" />
+                          </div>
+                          <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center">
+                            <Shield className="w-5 h-5 text-accent-foreground" />
+                          </div>
+                        </div>
+                        <Badge className="bg-primary text-primary-foreground">Live Data</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Floating Icons */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <Zap className="absolute top-20 left-10 h-6 w-6 text-primary/20 animate-pulse" />
-            <BarChart3 className="absolute top-32 right-16 h-8 w-8 text-primary/20 animate-bounce" />
-            <Shield className="absolute bottom-40 left-20 h-7 w-7 text-primary/20 animate-pulse" />
+            {/* Floating Elements */}
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-pulse"></div>
+            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-accent/10 rounded-full blur-xl animate-pulse delay-1000"></div>
           </div>
         </div>
       </div>
